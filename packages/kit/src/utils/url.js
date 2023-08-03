@@ -163,18 +163,22 @@ export function disable_search(url) {
 }
 
 const DATA_SUFFIX = '/__data.json';
+const DATA_SUFFIX_TRAILING_SLASH = '/___data.json';
 
 /** @param {string} pathname */
 export function has_data_suffix(pathname) {
-	return pathname.endsWith(DATA_SUFFIX);
+	return pathname.endsWith(DATA_SUFFIX) || pathname.endsWith(DATA_SUFFIX_TRAILING_SLASH);
 }
 
 /** @param {string} pathname */
 export function add_data_suffix(pathname) {
-	return pathname.replace(/\/$/, '') + DATA_SUFFIX;
+	return pathname.replace(/\/$/, '') + (pathname.endsWith('/') ? DATA_SUFFIX_TRAILING_SLASH : DATA_SUFFIX);
 }
 
 /** @param {string} pathname */
 export function strip_data_suffix(pathname) {
+	if (pathname.endsWith(DATA_SUFFIX_TRAILING_SLASH)) {
+		return pathname.slice(0, -DATA_SUFFIX_TRAILING_SLASH.length) + '/';
+	}
 	return pathname.slice(0, -DATA_SUFFIX.length);
 }
